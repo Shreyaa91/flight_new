@@ -1,0 +1,19 @@
+/* styles.css */
+
+/* Ensure the map fills its container */
+#map {
+    height: 100vh;
+}
+
+/* Sidebar styling */
+#sidebar {
+    padding: 20px;
+    background-color: #f8f9fa;
+    overflow-y: auto;
+    height: 100vh;
+    border-right: 1px solid #dee2e6;
+}
+
+#flight-info {
+    margin-top: 20px;
+}
