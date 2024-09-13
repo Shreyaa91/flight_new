@@ -6,7 +6,13 @@ const flightPlans = [
         departure: 'VABB (Mumbai)',
         destination: 'TFFR (Caribbean)',
         flightLevel: 'FL350',
-        coordinates: [[18.5793, 73.7929], [16.265, -61.5258]] // Mumbai to Caribbean
+        coordinates: [[18.5793, 73.7929], [16.265, -61.5258]], // Mumbai to Caribbean
+        flightRules: 'IFR',         // Instrument Flight Rules
+        flightType: 'G',            // General Aviation
+        departureTime: '1200Z',     // Time in UTC
+        cruisingSpeed: 'M082',      // Mach 0.82
+        route: 'DCT DUBAX/N0498F350 DCT KODAP/N0498F350 DCT', // Example route
+        arrivalTime: '1800Z'
     },
     {
         id: 2,
@@ -14,7 +20,13 @@ const flightPlans = [
         departure: 'VIDP (Delhi)',
         destination: 'OMDB (Dubai)',
         flightLevel: 'FL360',
-        coordinates: [[28.5562, 77.1000], [25.2532, 55.3657]] // Delhi to Dubai
+        coordinates: [[28.5562, 77.1000], [25.2532, 55.3657]], // Delhi to Dubai
+        flightRules: 'VFR',
+        flightType: 'S',            // Scheduled Air Service
+        departureTime: '1400Z',
+        cruisingSpeed: 'N0480',      // Speed in knots
+        route: 'DCT KAGAZ/N0480F360 DCT VIKIT/N0480F360 DCT',
+        arrivalTime: '1900Z'
     },
     {
         id: 3,
@@ -22,24 +34,15 @@ const flightPlans = [
         departure: 'EDDF (Frankfurt)',
         destination: 'JFK (New York)',
         flightLevel: 'FL370',
-        coordinates: [[50.0379, 8.5622], [40.6413, -73.7781]] // Frankfurt to New York
+        coordinates: [[50.0379, 8.5622], [40.6413, -73.7781]], // Frankfurt to New York
+        flightRules: 'IFR',
+        flightType: 'S',
+        departureTime: '0800Z',
+        cruisingSpeed: 'M085',
+        route: 'DCT RATSU/N0485F370 DCT OCEAN/N0485F370 DCT',
+        arrivalTime: '1600Z'
     },
-    {
-        id: 4,
-        aircraftId: 'QF123',
-        departure: 'YSSY (Sydney)',
-        destination: 'LAX (Los Angeles)',
-        flightLevel: 'FL380',
-        coordinates: [[-33.8688, 151.2093], [33.9416, -118.4085]] // Sydney to Los Angeles
-    },
-    {
-        id: 5,
-        aircraftId: 'AF456',
-        departure: 'CDG (Paris)',
-        destination: 'ICN (Seoul)',
-        flightLevel: 'FL340',
-        coordinates: [[49.0097, 2.5479], [37.5665, 126.978]] // Paris to Seoul
-    }
+    // Additional flight plans
 ];
 
 // Function to create a map for each flight
@@ -51,24 +54,25 @@ function createFlightMap(plan, mapId) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Draw the flight route (optional, if you want to display routes)
-    L.polyline(plan.coordinates, { color: 'blue' }).addTo(map);
-
     // Add click event to the entire map
     map.on('click', function() {
         displayFlightDetails(plan);
     });
 }
 
-// Function to display flight details in the sidebar
+// Function to display flight details in ICAO format in the sidebar
 function displayFlightDetails(plan) {
     const flightInfoDiv = document.getElementById('flight-info');
     flightInfoDiv.innerHTML = `
-        <h4>Flight Details</h4>
+        <h4>ICAO Flight Plan</h4>
         <p><strong>Aircraft ID:</strong> ${plan.aircraftId}</p>
-        <p><strong>Departure:</strong> ${plan.departure}</p>
-        <p><strong>Destination:</strong> ${plan.destination}</p>
+        <p><strong>Flight Rules:</strong> ${plan.flightRules}</p>
+        <p><strong>Flight Type:</strong> ${plan.flightType}</p>
+        <p><strong>Departure:</strong> ${plan.departure} at ${plan.departureTime}</p>
+        <p><strong>Destination:</strong> ${plan.destination} (ETA: ${plan.arrivalTime})</p>
+        <p><strong>Cruising Speed:</strong> ${plan.cruisingSpeed}</p>
         <p><strong>Flight Level:</strong> ${plan.flightLevel}</p>
+        <p><strong>Route:</strong> ${plan.route}</p>
     `;
 }
 
@@ -92,6 +96,7 @@ function generateFlightMaps() {
 
 // Initialize the maps for all flights
 generateFlightMaps();
+
 
 
 
