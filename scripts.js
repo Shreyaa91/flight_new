@@ -42,10 +42,51 @@ const flightPlans = [
         route: 'DCT RATSU/N0485F370 DCT OCEAN/N0485F370 DCT',
         arrivalTime: '1600Z'
     },
-    // Additional flight plans
+    {
+        id: 4,
+        aircraftId: 'QF123',
+        departure: 'YSSY (Sydney)',
+        destination: 'LAX (Los Angeles)',
+        flightLevel: 'FL380',
+        coordinates: [[-33.8688, 151.2093], [33.9416, -118.4085]], // Sydney to Los Angeles
+        flightRules: 'IFR',
+        flightType: 'S',
+        departureTime: '0600Z',
+        cruisingSpeed: 'M084',
+        route: 'DCT BALUS/N0484F380 DCT GINLA/N0484F380 DCT',
+        arrivalTime: '1300Z'
+    },
+    {
+        id: 5,
+        aircraftId: 'AF456',
+        departure: 'LFPG (Paris)',
+        destination: 'RKSI (Seoul)',
+        flightLevel: 'FL340',
+        coordinates: [[49.0097, 2.5479], [37.5665, 126.978]], // Paris to Seoul
+        flightRules: 'IFR',
+        flightType: 'S',
+        departureTime: '0700Z',
+        cruisingSpeed: 'M083',
+        route: 'DCT IRMOM/N0485F340 DCT HOSIV/N0485F340 DCT',
+        arrivalTime: '1500Z'
+    },
+    {
+        id: 6,
+        aircraftId: 'EK999',
+        departure: 'OMDB (Dubai)',
+        destination: 'YSSY (Sydney)',
+        flightLevel: 'FL360',
+        coordinates: [[25.2532, 55.3657], [-33.8688, 151.2093]], // Dubai to Sydney
+        flightRules: 'IFR',
+        flightType: 'S',
+        departureTime: '0900Z',
+        cruisingSpeed: 'M086',
+        route: 'DCT KAPET/N0484F360 DCT NITSO/N0484F360 DCT',
+        arrivalTime: '2200Z'
+    }
 ];
 
-// Function to create a map for each flight
+// Function to create a map for each flight and connect the locations
 function createFlightMap(plan, mapId) {
     const map = L.map(mapId).setView(plan.coordinates[0], 3);
 
@@ -53,6 +94,9 @@ function createFlightMap(plan, mapId) {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+
+    // Draw a line connecting the departure and destination
+    L.polyline(plan.coordinates, { color: 'black', weight: 2 }).addTo(map);
 
     // Add click event to the entire map
     map.on('click', function() {
@@ -96,6 +140,7 @@ function generateFlightMaps() {
 
 // Initialize the maps for all flights
 generateFlightMaps();
+
 
 
 
