@@ -1,12 +1,4 @@
-// // Initialize the map
-const map = L.map('map').setView([20.5937, 78.9629], 5); // Centered over India
-
-// Load OpenStreetMap tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-// Sample flight plans data with airport coordinates
+// Sample flight plans data with departure and destination coordinates
 const flightPlans = [
     {
         id: 1,
@@ -14,7 +6,7 @@ const flightPlans = [
         departure: 'VABB (Mumbai)',
         destination: 'TFFR (Caribbean)',
         flightLevel: 'FL350',
-        coordinates: [18.5793, 73.7929] // Mumbai Coordinates
+        coordinates: [[18.5793, 73.7929], [16.265, -61.5258]] // Mumbai to Caribbean
     },
     {
         id: 2,
@@ -22,7 +14,7 @@ const flightPlans = [
         departure: 'VIDP (Delhi)',
         destination: 'OMDB (Dubai)',
         flightLevel: 'FL360',
-        coordinates: [28.5562, 77.1000] // Delhi Coordinates
+        coordinates: [[28.5562, 77.1000], [25.2532, 55.3657]] // Delhi to Dubai
     },
     {
         id: 3,
@@ -30,7 +22,7 @@ const flightPlans = [
         departure: 'EDDF (Frankfurt)',
         destination: 'JFK (New York)',
         flightLevel: 'FL370',
-        coordinates: [50.0379, 8.5622] // Frankfurt Coordinates
+        coordinates: [[50.0379, 8.5622], [40.6413, -73.7781]] // Frankfurt to New York
     },
     {
         id: 4,
@@ -38,7 +30,7 @@ const flightPlans = [
         departure: 'YSSY (Sydney)',
         destination: 'LAX (Los Angeles)',
         flightLevel: 'FL380',
-        coordinates: [-33.8688, 151.2093] // Sydney Coordinates
+        coordinates: [[-33.8688, 151.2093], [33.9416, -118.4085]] // Sydney to Los Angeles
     },
     {
         id: 5,
@@ -46,22 +38,25 @@ const flightPlans = [
         departure: 'CDG (Paris)',
         destination: 'ICN (Seoul)',
         flightLevel: 'FL340',
-        coordinates: [49.0097, 2.5479] // Paris Coordinates
+        coordinates: [[49.0097, 2.5479], [37.5665, 126.978]] // Paris to Seoul
     }
 ];
 
-// Function to add flight plan markers to the map
-function addFlightMarkers() {
-    flightPlans.forEach(plan => {
-        const marker = L.marker(plan.coordinates).addTo(map);
-        marker.bindPopup(`<strong>Aircraft ID:</strong> ${plan.aircraftId}<br>
-                          <strong>Departure:</strong> ${plan.departure}<br>
-                          <strong>Destination:</strong> ${plan.destination}<br>
-                          <strong>Flight Level:</strong> ${plan.flightLevel}`);
-        // Add click event to display flight details in the sidebar
-        marker.on('click', function() {
-            displayFlightDetails(plan);
-        });
+// Function to create a map for each flight
+function createFlightMap(plan, mapId) {
+    const map = L.map(mapId).setView(plan.coordinates[0], 3);
+
+    // Load OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Draw the flight route (optional, if you want to display routes)
+    L.polyline(plan.coordinates, { color: 'blue' }).addTo(map);
+
+    // Add click event to the entire map
+    map.on('click', function() {
+        displayFlightDetails(plan);
     });
 }
 
@@ -77,8 +72,26 @@ function displayFlightDetails(plan) {
     `;
 }
 
-// Initialize the map with flight markers
-addFlightMarkers();
+// Function to dynamically generate map containers and initialize maps
+function generateFlightMaps() {
+    const mapsContainer = document.getElementById('maps-container');
+    
+    flightPlans.forEach((plan, index) => {
+        // Create a unique map container for each flight
+        const mapId = `map-${index}`;
+        const mapDiv = document.createElement('div');
+        mapDiv.id = mapId;
+        mapDiv.classList.add('map-container'); // Set up class for styling
+        mapDiv.innerHTML = `<div id="map-${index}-inner" class="map"></div>`;
+        mapsContainer.appendChild(mapDiv);
+
+        // Create the map for the current flight plan
+        createFlightMap(plan, `map-${index}-inner`);
+    });
+}
+
+// Initialize the maps for all flights
+generateFlightMaps();
 
 
 
