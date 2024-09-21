@@ -1,5 +1,6 @@
-// Sample flight plans data with departure and destination coordinates
-const flightPlans = [
+if (window.location.pathname === '/cctv') {
+  window.location.href = '/cctv.html';
+}const flightPlans = [
     {
         id: 1,
         aircraftId: 'BA123',
