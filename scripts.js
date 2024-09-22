@@ -3,7 +3,7 @@ if (window.location.pathname === '/cctv') {
 }const flightPlans = [
     {
         id: 1,
-        aircraftId: 'BA123',
+        aircraftId: 'MEHTA',
         departure: 'VABB (Mumbai)',
         destination: 'TFFR (Caribbean)',
         flightLevel: 'FL350',
